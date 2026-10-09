@@ -1,0 +1,2932 @@
+/* ==========================================================================
+   GOLMOK — DESIGN SYSTEM v1.0  "CORAL FIELD"
+   --------------------------------------------------------------------------
+   Principles (do not dilute):
+     1. CONVICTION — full-bleed, high-chroma colour fields. Never a timid grey
+        page with small white cards.
+     2. SCALE      — headlines are 2–3x normal app size. weight 800–900,
+        letter-spacing -0.03em, line-height 0.95–1.05.
+     3. ROUND      — 20–36px radii everywhere, buttons are 999px pills at
+        52–56px tall.
+     4. LEGIBLE    — it is still an information service. Body copy stays
+        16px/1.6 with real contrast.
+
+   Fonts are loaded by index.html (<link> to Google Fonts):
+     Figtree 400..900  +  Gothic A1 400..900
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. TOKENS
+   Brand constants never flip between themes. Semantic tokens do.
+   Light is the base. Dark is redefined in BOTH the media query and the
+   [data-theme="dark"] block — never colour-only-inside-a-media-query.
+   ========================================================================== */
+
+:root{
+  color-scheme: light;
+
+  /* ---- brand constants (identical in every theme) ---- */
+  --coral:        #FF5A3C;
+  --coral-deep:   #E23B1C;
+  --coral-tint:   #FFE7DF;
+  --cream:        #FFF6F0;
+  --ink:          #17120F;
+  --forest:       #14332B;
+  --forest-lift:  #1D4A3D;
+  --lime:         #D9F24B;
+  --lime-deep:    #B9D22C;
+
+  /* ---- semantic surface / text ---- */
+  --bg:           #FFF6F0;   /* page ground                              */
+  --surface:      #FFFFFF;   /* raised card                              */
+  --surface-2:    #FFEFE7;   /* recessed / tinted well                   */
+  --fg:           #17120F;   /* primary text                             */
+  --fg-sub:       #6A574C;   /* secondary text                           */
+  --fg-mute:      #968376;   /* tertiary text, icon strokes              */
+  --line:         #F0E1D7;   /* hairline                                 */
+  --line-strong:  #E2CEC1;   /* visible border on inputs / ghost buttons */
+  --tint:         #FFE7DF;   /* warm coral wash: bands, wells, icon pads */
+  --tint-fg:      #C3350F;   /* text/icon on --tint                      */
+  --tint-line:    transparent; /* pill edge for small --tint chips (dark only) */
+
+  /* ---- colour fields ---- */
+  --hero-bg:      #FF5A3C;   /* home hero + spot hero                    */
+  --hero-fg:      #17120F;   /* black headline on coral (mindtrip DNA)   */
+  --hero-sub:     rgba(23,18,15,.74);
+  --pop:          #D9F24B;   /* lime field (companions)                  */
+  --pop-fg:       #17120F;
+  --panel:        #14332B;   /* dark field (district head, teaser, foot) */
+  --panel-fg:     #F4EDE7;
+  --panel-sub:    rgba(244,237,231,.70);
+  --panel-line:   rgba(244,237,231,.17);
+  --panel-pop:    #D9F24B;   /* accent inside a dark field               */
+
+  /* ---- interactive ---- */
+  --accent:       #FF5A3C;   /* fills, dots, rules                       */
+  --accent-ink:   #C3350F;   /* coral as TEXT on light ground (AA)       */
+  --btn-fill:     #17120F;   /* .btn-primary background                  */
+  --btn-fill-fg:  #FFF6F0;
+  --focus:        #17120F;
+
+  /* ---- status ---- */
+  --ok:           #1B7A55;
+  --ok-soft:      #E3F2E9;
+  --warn:         #A65209;
+  --warn-soft:    #FCE9D6;
+
+  /* ---- elevation (warm shadows, never grey) ---- */
+  --sh-1: 0 1px 2px rgba(60,30,18,.05), 0 4px 14px rgba(60,30,18,.05);
+  --sh-2: 0 2px 6px rgba(60,30,18,.06), 0 16px 38px rgba(60,30,18,.10);
+  --sh-3: 0 4px 12px rgba(60,30,18,.08), 0 28px 64px rgba(60,30,18,.14);
+  --sh-pop: 0 10px 26px rgba(226,59,28,.30);
+
+  /* ---- radius scale ---- */
+  --r-xs:   10px;
+  --r-sm:   14px;
+  --r-md:   20px;
+  --r-lg:   28px;
+  --r-xl:   36px;
+  --r-2xl:  48px;
+  --r-pill: 999px;
+
+  /* ---- space scale ---- */
+  --s1:  4px;
+  --s2:  8px;
+  --s3:  12px;
+  --s4:  16px;
+  --s5:  24px;
+  --s6:  32px;
+  --s7:  48px;
+  --s8:  64px;
+  --s9:  96px;
+
+  /* ---- type scale ---- */
+  --fs-display: clamp(46px, 13.5vw, 92px);  /* .hero h1                  */
+  --fs-h1:      clamp(34px, 9vw, 58px);     /* page titles               */
+  --fs-h2:      clamp(28px, 7vw, 42px);     /* .sec-head h2              */
+  --fs-h3:      clamp(19px, 4.6vw, 23px);   /* card titles               */
+  --fs-lead:    clamp(16px, 4.2vw, 20px);   /* hero sub, story           */
+  --fs-body:    16px;
+  --fs-sm:      14px;
+  --fs-xs:      12.5px;
+  --fs-kicker:  12px;
+
+  /* ---- layout ---- */
+  --wrap:     760px;
+  --gutter:   20px;
+  --header-h: 72px;
+
+  --font-ui: 'Figtree','Gothic A1',-apple-system,BlinkMacSystemFont,'Segoe UI',
+             'Apple SD Gothic Neo','Malgun Gothic','Hiragino Sans','Yu Gothic UI',
+             'PingFang SC','Microsoft YaHei',sans-serif;
+}
+
+/* ---- dark: system preference (unless the user forced light) ---- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+
+    --bg:           #0E211C;
+    --surface:      #16332B;
+    --surface-2:    #1C4034;
+    --fg:           #F4EDE7;
+    --fg-sub:       #AEC0B7;
+    --fg-mute:      #86998F;
+    --line:         #23473B;
+    --line-strong:  #2F5A4A;
+    --tint:         #3B2119;
+    --tint-fg:      #FFA48E;
+    --tint-line:    rgba(255,164,142,.50); /* = --tint-fg at 50%        */
+
+    --hero-bg:      #FF5A3C;              /* chroma held, never muddied */
+    --hero-fg:      #17120F;
+    --hero-sub:     rgba(23,18,15,.76);
+    --pop:          #D9F24B;
+    --pop-fg:       #17120F;
+    --panel:        #1D4A3D;              /* lifts off the dark ground  */
+    --panel-fg:     #F4EDE7;
+    --panel-sub:    rgba(244,237,231,.72);
+    --panel-line:   rgba(244,237,231,.20);
+    --panel-pop:    #D9F24B;
+
+    --accent:       #FF6E52;
+    --accent-ink:   #FFA48E;
+    --btn-fill:     #F4EDE7;
+    --btn-fill-fg:  #14332B;
+    --focus:        #D9F24B;
+
+    --ok:           #63C79B;
+    --ok-soft:      #16362A;
+    --warn:         #F0A868;
+    --warn-soft:    #3A2A18;
+
+    --sh-1: 0 1px 2px rgba(0,0,0,.34), 0 4px 14px rgba(0,0,0,.30);
+    --sh-2: 0 2px 6px rgba(0,0,0,.36), 0 16px 38px rgba(0,0,0,.42);
+    --sh-3: 0 4px 12px rgba(0,0,0,.40), 0 28px 64px rgba(0,0,0,.50);
+    --sh-pop: 0 10px 26px rgba(255,90,60,.26);
+  }
+}
+
+/* ---- dark: explicit user toggle (must win in both directions) ---- */
+:root[data-theme="dark"]{
+  color-scheme: dark;
+
+  --bg:           #0E211C;
+  --surface:      #16332B;
+  --surface-2:    #1C4034;
+  --fg:           #F4EDE7;
+  --fg-sub:       #AEC0B7;
+  --fg-mute:      #86998F;
+  --line:         #23473B;
+  --line-strong:  #2F5A4A;
+  --tint:         #3B2119;
+  --tint-fg:      #FFA48E;
+  --tint-line:    rgba(255,164,142,.50);
+
+  --hero-bg:      #FF5A3C;
+  --hero-fg:      #17120F;
+  --hero-sub:     rgba(23,18,15,.76);
+  --pop:          #D9F24B;
+  --pop-fg:       #17120F;
+  --panel:        #1D4A3D;
+  --panel-fg:     #F4EDE7;
+  --panel-sub:    rgba(244,237,231,.72);
+  --panel-line:   rgba(244,237,231,.20);
+  --panel-pop:    #D9F24B;
+
+  --accent:       #FF6E52;
+  --accent-ink:   #FFA48E;
+  --btn-fill:     #F4EDE7;
+  --btn-fill-fg:  #14332B;
+  --focus:        #D9F24B;
+
+  --ok:           #63C79B;
+  --ok-soft:      #16362A;
+  --warn:         #F0A868;
+  --warn-soft:    #3A2A18;
+
+  --sh-1: 0 1px 2px rgba(0,0,0,.34), 0 4px 14px rgba(0,0,0,.30);
+  --sh-2: 0 2px 6px rgba(0,0,0,.36), 0 16px 38px rgba(0,0,0,.42);
+  --sh-3: 0 4px 12px rgba(0,0,0,.40), 0 28px 64px rgba(0,0,0,.50);
+  --sh-pop: 0 10px 26px rgba(255,90,60,.26);
+}
+
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+
+*,*::before,*::after{ box-sizing:border-box }
+
+/* v0.7: no global scroll-behavior:smooth. With a path router every screen
+   change calls scrollTo() (top for a new screen, the old spot on Back); a
+   global smooth value turned that into a visible glide over the NEW page.
+   In-page jumps ([data-scroll], form errors) still glide — app.js passes
+   behavior:'smooth' itself and drops it under prefers-reduced-motion. */
+html{
+  -webkit-text-size-adjust:100%;
+  overflow-x:hidden;            /* belt-and-braces: no page-level h-scroll */
+}
+
+body{
+  margin:0;
+  background:var(--bg);         /* explicit — never inherit the host ground */
+  color:var(--fg);
+  font-family:var(--font-ui);
+  font-size:var(--fs-body);
+  line-height:1.6;
+  letter-spacing:-.006em;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-synthesis-weight:none;
+}
+
+h1,h2,h3,h4{
+  margin:0;
+  font-weight:800;
+  letter-spacing:-.03em;
+  line-height:1.02;
+  text-wrap:balance;
+  word-break:keep-all;          /* Korean: never break mid-word            */
+  overflow-wrap:break-word;     /* English: still break monster words      */
+}
+h1{ font-weight:900 }
+p{ margin:0 }
+ol,ul{ margin:0; padding:0 }
+img,svg,video{ max-width:100%; height:auto; display:block }
+a{ color:inherit; text-decoration:none }
+
+button{
+  font:inherit; color:inherit; letter-spacing:inherit;
+  background:none; border:0; padding:0; margin:0;
+  cursor:pointer; text-align:left;
+}
+/* Card links. The navigation cards (.dcard .spot .sib-card .saved-item .ccard) are real
+   <a href> links (new tab, copy link, crawlable), not buttons. a{} above already gives
+   inherited font/colour and no underline; these lines keep the rest of the old button box:
+   left-aligned text, and for the two cards without their own display (.sib-card,
+   .saved-item) content centred vertically when a grid row or min-height makes the card
+   taller than its content — what a block-level <button> did. .spot/.ccard set
+   display:flex themselves and are not centred (flex buttons weren't either). */
+.spot,.sib-card,.saved-item,.ccard{ text-align:left }
+.sib-card,.saved-item{ display:flex; flex-direction:column; justify-content:center }
+input,textarea,select{ font:inherit; color:var(--fg) }
+
+:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:3px;
+  border-radius:6px;
+}
+/* focus rings inside dark or high-chroma fields need their own colour */
+.d-head :focus-visible,
+.comp-teaser :focus-visible,
+.c-detail :focus-visible,
+.show-local :focus-visible,
+.p-hero :focus-visible,
+.safety :focus-visible,
+footer :focus-visible{ outline-color:var(--lime) }
+.hero :focus-visible,
+.s-hero :focus-visible,
+.comp-hero :focus-visible,
+.free-note :focus-visible{ outline-color:var(--ink) }
+
+.num{ font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1 }
+[hidden]{ display:none !important }
+::selection{ background:var(--lime); color:var(--ink) }
+
+
+/* ==========================================================================
+   3. LAYOUT PRIMITIVES
+   ========================================================================== */
+
+.wrap{
+  width:100%;
+  max-width:var(--wrap);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+section{ padding:var(--s7) 0 }
+@media (min-width:760px){ section{ padding:var(--s8) 0 } }
+
+.sec-head{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:var(--s2) var(--s4);
+  margin-bottom:var(--s5);
+}
+.sec-head h2{
+  font-size:var(--fs-h2);
+  line-height:.98;
+  max-width:16ch;
+}
+.sec-head .note{
+  flex-basis:100%;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  font-weight:600;
+  max-width:46ch;
+}
+
+/* small all-caps label used for SAMPLE / MVP style flags */
+.tagchip{
+  display:inline-flex; align-items:center;
+  border-radius:var(--r-pill);
+  padding:6px 12px;
+  background:var(--lime);
+  color:var(--ink);
+  font-size:11px; font-weight:800;
+  letter-spacing:.10em; text-transform:uppercase;
+}
+
+.empty-note{
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  font-weight:600;
+  padding:var(--s6) var(--s2);
+  text-align:center;
+}
+
+
+/* ==========================================================================
+   4. BUTTONS — every one is a pill, 52px minimum
+   ========================================================================== */
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:var(--s2);
+  min-height:52px;
+  padding:0 26px;
+  border:0;
+  border-radius:var(--r-pill);
+  font-size:15px; font-weight:800;
+  letter-spacing:-.012em;
+  line-height:1.1;
+  text-align:center;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+.btn svg{ flex:none }
+.btn:active{ transform:translateY(1px) }
+
+.btn-primary{
+  background:var(--btn-fill);
+  color:var(--btn-fill-fg);
+  box-shadow:var(--sh-2);
+}
+.btn-lime{
+  background:var(--lime);
+  color:var(--ink);
+  box-shadow:0 8px 22px rgba(185,210,44,.34);
+}
+.btn-ghost{
+  background:var(--surface);
+  color:var(--fg);
+  border:2px solid var(--line-strong);
+}
+@media (prefers-reduced-motion: no-preference){
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:var(--sh-3) }
+  .btn-lime:hover{ transform:translateY(-2px) }
+  .btn-ghost:hover{ border-color:var(--fg); transform:translateY(-2px) }
+}
+
+/* --- buttons sitting inside a high-chroma field (coral / lime) --- */
+.hero .btn-primary,
+.s-hero .btn-primary,
+.comp-hero .btn-primary,
+.free-note .btn-primary{ background:var(--ink); color:var(--cream) }
+
+.hero .btn-ghost,
+.s-hero .btn-ghost,
+.comp-hero .btn-ghost,
+.free-note .btn-ghost{
+  background:rgba(255,255,255,.94);
+  color:var(--ink);
+  border-color:transparent;
+  box-shadow:var(--sh-1);
+}
+.hero .btn-ghost:hover,
+.s-hero .btn-ghost:hover,
+.comp-hero .btn-ghost:hover{ border-color:var(--ink) }
+
+/* --- buttons sitting inside a dark forest panel --- */
+.d-head .btn-primary,
+.comp-teaser .btn-primary,
+.c-detail .btn-primary,
+.p-hero .btn-primary,
+.show-local .btn-primary{ background:var(--lime); color:var(--ink); box-shadow:none }
+
+.d-head .btn-ghost,
+.comp-teaser .btn-ghost,
+.c-detail .btn-ghost,
+.p-hero .btn-ghost,
+.show-local .btn-ghost{
+  background:transparent;
+  color:var(--panel-fg);
+  border-color:var(--panel-line);
+}
+.d-head .btn-ghost:hover,
+.comp-teaser .btn-ghost:hover,
+.c-detail .btn-ghost:hover,
+.p-hero .btn-ghost:hover{ border-color:var(--panel-fg) }
+
+/* --- disabled (e.g. a companion whose seats are full) --- */
+.btn[disabled],
+.btn[aria-disabled="true"]{
+  opacity:.45;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+@media (prefers-reduced-motion: no-preference){
+  .btn[disabled]:hover,
+  .btn[aria-disabled="true"]:hover{ transform:none; box-shadow:none }
+}
+.btn[disabled]:active,
+.btn[aria-disabled="true"]:active{ transform:none }
+
+
+/* ==========================================================================
+   5. CHIPS & BADGES
+   ========================================================================== */
+
+.chips{ display:flex; flex-wrap:wrap; gap:var(--s2); margin-top:var(--s3) }
+
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:var(--r-pill);
+  padding:6px 13px;
+  background:var(--surface-2);
+  color:var(--fg);
+  font-size:var(--fs-xs);
+  font-weight:800;
+  letter-spacing:-.005em;
+  white-space:nowrap;
+}
+.chip.lime{ background:var(--lime); color:var(--ink) }
+.chip.coral{ background:var(--tint); color:var(--tint-fg) }
+.chip.gray,
+.chip.ghost{ background:transparent; color:var(--fg-sub); box-shadow:inset 0 0 0 1.5px var(--line-strong) }
+
+/* chips floating on a colour field */
+.hero .chip,
+.s-hero .chip,
+.comp-hero .chip{
+  background:rgba(255,255,255,.95);
+  color:var(--ink);
+  box-shadow:var(--sh-1);
+}
+.d-head .chip,
+.comp-teaser .chip,
+.p-hero .chip{ background:var(--panel-line); color:var(--panel-fg) }
+.d-head .chip.lime,
+.comp-teaser .chip.lime,
+.p-hero .chip.lime{ background:var(--lime); color:var(--ink) }
+
+.badges{ display:flex; flex-wrap:wrap; gap:6px }
+.badge{
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:var(--r-pill);
+  padding:5px 11px;
+  background:var(--ok-soft);
+  color:var(--fg);
+  font-size:12px; font-weight:800;
+  white-space:nowrap;
+}
+.badge::before{
+  content:"";
+  width:6px; height:6px; flex:none;
+  border-radius:50%;
+  background:var(--ok);
+}
+.badge.warn{ background:var(--warn-soft) }
+.badge.warn::before{ background:var(--warn) }
+
+
+/* ==========================================================================
+   6. HEADER
+   Static (not sticky) so it can sit directly on top of a full-bleed colour
+   field without a translucent bar spoiling the field.
+   ========================================================================== */
+
+header{
+  position:relative;
+  z-index:20;
+  background:transparent;
+  color:var(--fg);
+}
+.bar{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s3);
+  min-height:var(--header-h);
+  padding-block:var(--s3);
+}
+.brand{
+  display:inline-flex; align-items:baseline;
+  font-size:clamp(22px,5.6vw,27px);
+  font-weight:900;
+  letter-spacing:-.045em;
+  line-height:1;
+}
+.brand i{ font-style:normal; color:var(--accent) }
+
+.nav-right{ display:flex; align-items:center; gap:var(--s4) }
+.nav-link{
+  display:inline-flex; align-items:center;
+  min-height:44px;
+  font-size:var(--fs-sm);
+  font-weight:800;
+  letter-spacing:-.01em;
+  color:var(--fg-sub);
+  white-space:nowrap;
+}
+.nav-link:hover{ color:var(--fg) }
+@media (max-width:600px){ .nav-link{ display:none } }
+
+.langs{
+  display:flex; gap:2px;
+  border-radius:var(--r-pill);
+  padding:4px;
+  background:rgba(23,18,15,.07);
+}
+@supports (background: color-mix(in srgb, red 50%, blue)){
+  .langs{ background:color-mix(in srgb, var(--fg) 9%, transparent) }
+}
+.langs button{
+  min-height:36px;
+  padding:0 12px;
+  border-radius:var(--r-pill);
+  font-size:13px; font-weight:800;
+  color:var(--fg-sub);
+  white-space:nowrap;
+  display:inline-flex; align-items:center;
+  transition:background-color .15s ease, color .15s ease;
+}
+.langs button:hover{ color:var(--fg) }
+.langs button[aria-pressed="true"]{ background:var(--fg); color:var(--bg) }
+.langs .full{ display:inline }
+.langs .abbr{ display:none }
+@media (max-width:720px){
+  .langs .full{ display:none }
+  .langs .abbr{ display:inline }
+  .langs button{ padding:0 11px }
+}
+
+/* --- header standing on a coral / lime / forest field --- */
+@supports selector(:has(*)){
+  body:has(.hero) header,
+  body:has(.comp-hero) header{ color:var(--ink) }
+  body:has(.hero) .nav-link,
+  body:has(.comp-hero) .nav-link{ color:rgba(23,18,15,.72) }
+  body:has(.hero) .nav-link:hover,
+  body:has(.comp-hero) .nav-link:hover{ color:var(--ink) }
+  body:has(.hero) .brand i,
+  body:has(.comp-hero) .brand i{ color:var(--forest) }
+  body:has(.hero) .langs,
+  body:has(.comp-hero) .langs{ background:rgba(23,18,15,.12) }
+  body:has(.hero) .langs button,
+  body:has(.comp-hero) .langs button{ color:rgba(23,18,15,.74) }
+  body:has(.hero) .langs button[aria-pressed="true"],
+  body:has(.comp-hero) .langs button[aria-pressed="true"]{ background:var(--ink); color:var(--cream) }
+
+  /* --- header standing on a forest field --- */
+  body:has(.p-hero) header{ color:var(--panel-fg) }
+  body:has(.p-hero) .nav-link{ color:var(--panel-sub) }
+  body:has(.p-hero) .nav-link:hover{ color:var(--panel-fg) }
+  body:has(.p-hero) .brand i{ color:var(--lime) }
+  body:has(.p-hero) .langs{ background:var(--panel-line) }
+  body:has(.p-hero) .langs button{ color:var(--panel-sub) }
+  body:has(.p-hero) .langs button[aria-pressed="true"]{ background:var(--cream); color:var(--forest) }
+
+  /* pull the full-bleed field up behind the header */
+  body:has(.hero) .hero,
+  body:has(.comp-hero) .comp-hero,
+  body:has(.p-hero) .p-hero{
+    margin-top:calc(-1 * var(--header-h) - var(--s5));
+    padding-top:calc(var(--header-h) + var(--s7));
+  }
+}
+
+
+/* ==========================================================================
+   7. HERO — full-bleed coral field. The whole point of the redesign.
+   Must be the FIRST element after <header>, edge to edge, no .wrap around it.
+   ========================================================================== */
+
+.hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  min-height:min(80vh,660px);
+  background:var(--hero-bg);
+  color:var(--hero-fg);
+  padding:var(--s7) 0 var(--s8);
+  border-end-start-radius:var(--r-2xl);
+  border-end-end-radius:var(--r-2xl);
+}
+.hero > *{ width:100% }
+@media (min-width:760px){
+  .hero{ padding:var(--s8) 0 var(--s9) }
+}
+/* On a phone the hero must NOT eat the whole first screen — the first district
+   card has to peek above the fold, or the page reads as a landing page with
+   nothing in it. Tighten spacing only; the headline and buttons keep their size. */
+@media (max-width:430px){
+  .hero{ min-height:auto; padding:var(--s6) 0 var(--s5) }
+  .hero .kicker{ margin-bottom:var(--s4) }
+  .hero .sub{ margin-top:var(--s4) }
+  .hero .hero-cta{ margin-top:var(--s5); flex-wrap:nowrap }
+  /* 두 CTA가 줄바꿈되면 히어로가 66px 길어져 첫 카드가 화면 밖으로 밀린다 */
+  .hero .hero-cta .btn{ flex:1 1 0; min-width:0; padding:0 14px }
+  .hero .search{ margin-top:var(--s5) }
+  .hero + section{ padding-top:var(--s6) }
+}
+/* organic blob wash (layla DNA) — decorative only */
+.hero::before{
+  content:"";
+  position:absolute; z-index:-1;
+  right:-18%; bottom:-38%;
+  width:min(78vw,560px); aspect-ratio:1;
+  background:radial-gradient(circle at 35% 35%, rgba(255,255,255,.42), rgba(255,255,255,0) 68%);
+  border-radius:52% 48% 44% 56% / 46% 52% 48% 54%;
+  pointer-events:none;
+}
+.hero::after{
+  content:"";
+  position:absolute; z-index:-1;
+  left:-24%; top:-30%;
+  width:min(62vw,420px); aspect-ratio:1;
+  background:radial-gradient(circle at 60% 60%, rgba(217,242,75,.34), rgba(217,242,75,0) 70%);
+  border-radius:44% 56% 52% 48% / 56% 44% 56% 44%;
+  pointer-events:none;
+}
+
+.hero .kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-bottom:var(--s5);
+  border-radius:var(--r-pill);
+  padding:8px 16px;
+  background:rgba(23,18,15,.10);
+  color:var(--ink);
+  font-size:var(--fs-kicker);
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  font-size:var(--fs-display);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.035em;
+  color:var(--hero-fg);
+  max-width:14ch;
+}
+.hero h1 em{
+  font-style:normal;
+  display:block;
+}
+.hero h1 .line2{ display:block }
+.hero h1 mark{
+  background:var(--lime);
+  color:var(--ink);
+  padding:0 .12em;
+  border-radius:.16em;
+  box-decoration-break:clone;
+  -webkit-box-decoration-break:clone;
+}
+
+.hero .sub{
+  margin-top:var(--s5);
+  max-width:34ch;
+  font-size:var(--fs-lead);
+  font-weight:600;
+  line-height:1.45;
+  color:var(--hero-sub);
+}
+
+.hero-cta{
+  display:flex; flex-wrap:wrap; gap:var(--s3);
+  margin-top:var(--s6);
+}
+.hero-cta .btn{ min-height:56px; padding:0 30px; font-size:16px }
+@media (max-width:420px){
+  .hero-cta{ gap:10px }
+  .hero-cta .btn{ flex:1 1 100%; }
+}
+
+
+/* ==========================================================================
+   8. SEARCH — a big white pill; legible on coral and on cream alike
+   ========================================================================== */
+
+.search{
+  display:flex; align-items:center; gap:var(--s3);
+  min-height:60px;
+  padding:0 22px;
+  border-radius:var(--r-pill);
+  background:#FFFFFF;
+  box-shadow:var(--sh-2);
+}
+.hero .search{ margin-top:var(--s6); max-width:520px }
+.search svg{ flex:none; stroke:#968376; fill:none }
+.search input{
+  flex:1; min-width:0;
+  border:0; background:none;
+  padding:16px 0;
+  font-size:16px; font-weight:600;
+  color:#17120F;
+}
+.search input::placeholder{ color:#96837e; font-weight:600 }
+.search input:focus{ outline:none }
+.search:focus-within{ box-shadow:var(--sh-2), 0 0 0 3px var(--ink) }
+
+
+/* ==========================================================================
+   9. DISTRICT CARDS
+   ========================================================================== */
+
+.cards{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+}
+@media (min-width:760px){ .cards{ grid-template-columns:1fr 1fr; gap:var(--s4) } }
+
+.dcard{
+  display:flex; align-items:center; gap:var(--s4);
+  width:100%;
+  padding:var(--s5) var(--s5) var(--s5) var(--s4);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.dcard[hidden]{ display:none }
+@media (prefers-reduced-motion: no-preference){
+  .dcard:hover{ transform:translateY(-3px); box-shadow:var(--sh-2) }
+}
+
+/* squircle tile */
+.sq{
+  flex:none;
+  display:flex; align-items:center; justify-content:center;
+  width:60px; height:60px;
+  border-radius:var(--r-md);
+  color:var(--cream);
+  font-size:18px; font-weight:900;
+  letter-spacing:-.01em;
+}
+.sq-seongsu  { background:linear-gradient(145deg,#FF7A56,#E23B1C) }
+.sq-gwangjang{ background:linear-gradient(145deg,#FF9A3C,#DB4A0C) }
+.sq-euljiro  { background:linear-gradient(145deg,#2E5B4B,#0C1F1A) }
+.sq-mangwon  { background:linear-gradient(145deg,#4FA372,#1E6E4E) }
+.sq-gangneung{ background:linear-gradient(145deg,#3F97A2,#14453F) }
+.sq-gongju   { background:linear-gradient(145deg,#9BA82F,#4E5C14) }
+
+.dcard .body{ flex:1; min-width:0 }
+.dcard .n{
+  display:block;
+  font-size:var(--fs-h3);
+  font-weight:800;
+  letter-spacing:-.028em;
+  line-height:1.1;
+}
+.dcard .d{
+  display:block;
+  margin-top:4px;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.45;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+.dcard .chips{ margin-top:var(--s3) }
+
+.chev{
+  flex:none;
+  margin-left:auto;
+  color:var(--fg-mute);
+  transition:transform .18s ease, color .18s ease;
+}
+.dcard:hover .chev{ color:var(--accent); transform:translateX(3px) }
+
+
+/* ==========================================================================
+   10. SEASONAL STRIP  (.strip / .now-card)
+   Horizontally scrollable — the ONLY place horizontal scroll is allowed.
+   ========================================================================== */
+
+.strip{
+  display:flex; gap:var(--s3);
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;
+  padding:2px 2px var(--s4);
+  scrollbar-width:thin;
+}
+.strip::-webkit-scrollbar{ height:6px }
+.strip::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:var(--r-pill) }
+.strip::-webkit-scrollbar-track{ background:transparent }
+
+.now-card{
+  flex:0 0 clamp(240px, 72vw, 300px);
+  scroll-snap-align:start;
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+}
+.now-card .when{
+  display:flex; align-items:center; gap:8px;
+  color:var(--accent-ink);
+  font-size:12px; font-weight:800;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+.dot{
+  flex:none;
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--accent);
+}
+@media (prefers-reduced-motion: no-preference){
+  .now-card .dot{ animation:golmok-pulse 1.8s ease-in-out infinite }
+  @keyframes golmok-pulse{ 50%{ opacity:.3; transform:scale(.75) } }
+}
+.now-card h3{
+  margin-top:var(--s3);
+  font-size:19px; font-weight:800;
+  letter-spacing:-.026em;
+  line-height:1.15;
+}
+.now-card p{
+  margin-top:6px;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.5;
+}
+
+
+/* ==========================================================================
+   11. GOOD TO KNOW  (.know / .know-item)
+   ========================================================================== */
+
+.know{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+}
+@media (min-width:600px){ .know{ grid-template-columns:1fr 1fr } }
+
+.know-item{
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface-2);
+}
+.know-item .k{
+  font-size:17px; font-weight:800;
+  letter-spacing:-.024em;
+  line-height:1.2;
+}
+.know-item .v{
+  margin-top:6px;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+}
+
+
+/* ==========================================================================
+   12. COMPANION TEASER — forest colour field on the home page
+   ========================================================================== */
+
+.comp-teaser{
+  position:relative;
+  overflow:hidden;
+  padding:var(--s7) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--panel);
+  color:var(--panel-fg);
+}
+@media (min-width:760px){ .comp-teaser{ padding:var(--s8) var(--s7) } }
+.comp-teaser::after{
+  content:"";
+  position:absolute; right:-14%; top:-40%;
+  width:min(58vw,380px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(217,242,75,.20), rgba(217,242,75,0) 68%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.comp-teaser > *{ position:relative }
+.comp-teaser .kicker{
+  display:inline-flex;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-pill);
+  padding:7px 15px;
+  background:var(--lime);
+  color:var(--ink);
+  font-size:11.5px; font-weight:900;
+  letter-spacing:.11em; text-transform:uppercase;
+}
+.comp-teaser h2{
+  font-size:var(--fs-h2);
+  line-height:.99;
+  max-width:15ch;
+  color:var(--panel-fg);
+}
+.comp-teaser p{
+  margin-top:var(--s4);
+  max-width:44ch;
+  color:var(--panel-sub);
+  font-size:var(--fs-lead);
+  font-weight:500;
+  line-height:1.5;
+}
+.comp-teaser .btn{ margin-top:var(--s5) }
+
+
+/* ==========================================================================
+   13. MERCHANT BAND
+   ========================================================================== */
+
+.merchant{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:var(--s5);
+  padding:var(--s6) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--tint);
+  color:var(--fg);
+}
+@media (min-width:760px){ .merchant{ padding:var(--s7) var(--s6) } }
+.merchant h2{
+  font-size:clamp(24px,5.6vw,32px);
+  line-height:1.02;
+  max-width:18ch;
+  color:var(--fg);
+}
+.merchant p{
+  margin-top:var(--s3);
+  max-width:48ch;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+}
+.merchant .btn{ flex:none }
+@media (max-width:520px){ .merchant .btn{ width:100% } }
+
+
+/* ==========================================================================
+   14. FOOTER — full-bleed forest field, closes every page
+   ========================================================================== */
+
+footer{
+  margin-top:var(--s7);
+  padding:var(--s7) 0 var(--s8);
+  border-start-start-radius:var(--r-2xl);
+  border-start-end-radius:var(--r-2xl);
+  background:var(--panel);
+  color:var(--panel-sub);
+  font-size:var(--fs-xs);
+}
+footer .row{
+  display:flex; flex-wrap:wrap; justify-content:space-between;
+  gap:var(--s3) var(--s5);
+}
+footer a{ color:var(--panel-fg); font-weight:800 }
+footer a:hover{ color:var(--lime) }
+.footer-note{ max-width:44ch }
+
+
+/* ==========================================================================
+   15. DISTRICT DETAIL
+   ========================================================================== */
+
+.back{
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:44px;
+  margin:var(--s4) 0 var(--s5);
+  padding:0 18px 0 14px;
+  border-radius:var(--r-pill);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+  color:var(--fg);
+  font-size:var(--fs-sm); font-weight:800;
+  transition:transform .16s ease;
+}
+@media (prefers-reduced-motion: no-preference){
+  .back:hover{ transform:translateX(-3px) }
+}
+
+/* dark colour-field head block */
+.d-head{
+  position:relative;
+  overflow:hidden;
+  padding:var(--s6) var(--s5) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--panel);
+  color:var(--panel-fg);
+}
+@media (min-width:760px){ .d-head{ padding:var(--s7) var(--s6) var(--s6) } }
+.d-head::after{
+  content:"";
+  position:absolute; right:-18%; top:-46%;
+  width:min(60vw,420px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(255,90,60,.30), rgba(255,90,60,0) 66%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.d-head > *{ position:relative }
+.d-head .top{ display:flex; align-items:center; gap:var(--s4) }
+.d-head .sq{ width:68px; height:68px; border-radius:var(--r-md); font-size:20px }
+.d-head .region{
+  color:var(--lime);
+  font-size:12px; font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.d-head h1{
+  margin-top:4px;
+  font-size:var(--fs-h1);
+  line-height:.96;
+  color:var(--panel-fg);
+}
+.d-head .hangul{
+  margin-top:6px;
+  color:var(--panel-sub);
+  font-size:15px; font-weight:700;
+}
+.d-head .tagline{
+  margin-top:var(--s5);
+  max-width:42ch;
+  color:var(--panel-sub);
+  font-size:var(--fs-lead);
+  font-weight:500;
+  line-height:1.45;
+}
+
+.statline{
+  display:flex; flex-wrap:wrap; gap:var(--s2);
+  margin-top:var(--s5);
+}
+.stat{
+  flex:1 1 140px;
+  min-width:120px;
+  padding:var(--s3) var(--s4);
+  border-radius:var(--r-md);
+  background:var(--panel-line);
+}
+.stat .lbl{
+  display:block;
+  color:var(--panel-sub);
+  font-size:10.5px; font-weight:900;
+  letter-spacing:.1em; text-transform:uppercase;
+}
+.stat b{
+  display:block;
+  margin-top:3px;
+  color:var(--panel-fg);
+  font-size:14px; font-weight:800;
+  letter-spacing:-.015em;
+}
+
+/* the story — set big, like a magazine standfirst */
+.story{ padding:var(--s7) 0 0 }
+.story .k{
+  color:var(--accent-ink);
+  font-size:12px; font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+  margin-bottom:var(--s3);
+}
+.story p{
+  max-width:56ch;
+  font-size:var(--fs-lead);
+  font-weight:500;
+  line-height:1.62;
+  color:var(--fg);
+}
+
+/* half-day route */
+.route{
+  margin-top:var(--s6);
+  padding:var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+}
+@media (min-width:760px){ .route{ padding:var(--s6) } }
+.route .k{
+  color:var(--accent-ink);
+  font-size:12px; font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.route ol{
+  position:relative;
+  list-style:none;
+  margin-top:var(--s5);
+}
+.route ol::before{
+  content:"";
+  position:absolute; left:17px; top:10px; bottom:14px;
+  width:2px;
+  background:var(--line);
+}
+.route li{
+  position:relative;
+  padding:0 0 var(--s5) 52px;
+}
+.route li:last-child{ padding-bottom:0 }
+.route .n{
+  position:absolute; left:0; top:0;
+  display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#FFF6F0;
+  font-size:15px; font-weight:900;
+}
+.route .t{
+  font-size:17px; font-weight:800;
+  letter-spacing:-.022em;
+  line-height:1.25;
+  padding-top:6px;
+}
+.route .time{
+  display:inline-block;
+  margin-right:9px;
+  color:var(--accent-ink);
+  font-size:13px; font-weight:900;
+  letter-spacing:0;
+}
+.route .d{
+  margin-top:4px;
+  max-width:52ch;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.5;
+}
+
+
+/* ==========================================================================
+   16. SPOT LIST
+   ========================================================================== */
+
+.filters{
+  display:flex; flex-wrap:wrap; gap:var(--s2);
+  margin:var(--s5) 0;
+}
+.filters button{
+  display:inline-flex; align-items:center;
+  min-height:46px;
+  padding:0 20px;
+  border-radius:var(--r-pill);
+  background:var(--surface);
+  box-shadow:inset 0 0 0 2px var(--line-strong);
+  color:var(--fg-sub);
+  font-size:var(--fs-sm); font-weight:800;
+  white-space:nowrap;
+  transition:background-color .15s ease, color .15s ease, box-shadow .15s ease;
+}
+.filters button:hover{ color:var(--fg); box-shadow:inset 0 0 0 2px var(--fg) }
+.filters button[aria-pressed="true"]{
+  background:var(--fg);
+  color:var(--bg);
+  box-shadow:none;
+}
+
+.spots{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+}
+@media (min-width:760px){ .spots{ grid-template-columns:1fr 1fr; gap:var(--s4) } }
+
+.spot{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:var(--s3);
+  width:100%;
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+@media (prefers-reduced-motion: no-preference){
+  .spot:hover{ transform:translateY(-3px); box-shadow:var(--sh-2) }
+}
+.spot .top{
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:var(--s3);
+  width:100%;
+}
+.spot h3{
+  font-size:20px; font-weight:800;
+  letter-spacing:-.028em;
+  line-height:1.15;
+}
+.spot .ko-name{
+  display:inline-block;
+  margin-left:7px;
+  color:var(--fg-mute);
+  font-size:13px; font-weight:700;
+  letter-spacing:-.01em;
+}
+.spot .price{
+  flex:none;
+  color:var(--accent-ink);
+  font-size:13.5px; font-weight:900;
+}
+.spot .cat{
+  margin-top:-8px;
+  color:var(--fg-sub);
+  font-size:12.5px; font-weight:800;
+  letter-spacing:.04em; text-transform:uppercase;
+}
+.spot .go{
+  color:var(--accent-ink);
+  font-size:var(--fs-sm); font-weight:900;
+}
+
+.tipbox{
+  width:100%;
+  padding-top:var(--s3);
+  border-top:2px solid var(--line);
+}
+.tipbox .lbl{
+  display:block;
+  margin-bottom:3px;
+  color:var(--accent-ink);
+  font-size:10.5px; font-weight:900;
+  letter-spacing:.11em; text-transform:uppercase;
+}
+.tipbox p{
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+}
+
+.lite-note{
+  margin-top:var(--s4);
+  padding:var(--s4) var(--s5);
+  border-radius:var(--r-md);
+  background:var(--tint);
+  color:var(--tint-fg);
+  font-size:var(--fs-sm);
+  font-weight:700;
+  line-height:1.5;
+}
+
+
+/* ==========================================================================
+   17. SPOT DETAIL
+   ========================================================================== */
+
+.s-hero{
+  position:relative;
+  overflow:hidden;
+  padding:var(--s6) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--hero-bg);
+  color:var(--hero-fg);
+}
+@media (min-width:760px){ .s-hero{ padding:var(--s7) var(--s6) } }
+.s-hero::after{
+  content:"";
+  position:absolute; right:-16%; bottom:-46%;
+  width:min(56vw,380px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.38), rgba(255,255,255,0) 68%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.s-hero > *{ position:relative }
+.s-hero .cat-row{
+  display:flex; flex-wrap:wrap; align-items:center; gap:var(--s3);
+  margin-bottom:var(--s3);
+}
+.s-hero .cat{
+  color:rgba(23,18,15,.72);
+  font-size:12px; font-weight:900;
+  letter-spacing:.11em; text-transform:uppercase;
+}
+.s-hero .price{
+  color:var(--ink);
+  font-size:14px; font-weight:900;
+}
+.s-hero h1{
+  font-size:var(--fs-h1);
+  line-height:.96;
+  color:var(--hero-fg);
+}
+.s-hero .hangul-big{
+  margin-top:8px;
+  color:rgba(23,18,15,.70);
+  font-size:19px; font-weight:800;
+  letter-spacing:-.02em;
+}
+.s-hero .badges{ margin-top:var(--s4) }
+.s-hero .badge{ background:rgba(255,255,255,.92); color:var(--ink) }
+.s-hero .badge::before{ background:var(--forest) }
+.s-hero .badge.warn{ background:rgba(23,18,15,.14) }
+.s-hero .badge.warn::before{ background:var(--ink) }
+
+.s-actions{
+  display:flex; flex-wrap:wrap; gap:var(--s2);
+  margin-top:var(--s5);
+}
+.s-actions .btn{ flex:1 1 auto; min-width:150px; padding:0 20px }
+.s-actions .btn.small{ flex:0 0 auto; min-width:0; padding:0 22px }
+
+.s-body{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+  padding:var(--s5) 0 0;
+}
+@media (min-width:760px){ .s-body{ grid-template-columns:1.05fr .95fr; gap:var(--s4) } }
+.s-col{ display:flex; flex-direction:column; gap:var(--s3) }
+
+.s-card{
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+}
+.s-card .lbl{
+  display:block;
+  margin-bottom:var(--s2);
+  color:var(--accent-ink);
+  font-size:10.5px; font-weight:900;
+  letter-spacing:.11em; text-transform:uppercase;
+}
+.s-card p{
+  max-width:52ch;
+  color:var(--fg);
+  font-size:15.5px;
+  line-height:1.6;
+}
+
+/* "show this to a local" — dark field, oversized Korean */
+.show-local{
+  background:var(--panel);
+  color:var(--panel-fg);
+  box-shadow:var(--sh-2);
+}
+.show-local .lbl{ color:var(--lime) }
+.show-local .pre{
+  color:var(--panel-sub);
+  font-size:var(--fs-sm);
+  font-weight:600;
+}
+.show-local .big-ko{
+  margin-top:var(--s2);
+  font-size:clamp(30px,8vw,50px);
+  font-weight:900;
+  letter-spacing:-.03em;
+  line-height:1.06;
+  color:var(--panel-fg);
+  word-break:keep-all;
+}
+.show-local .area{
+  margin-top:var(--s3);
+  color:var(--panel-sub);
+  font-size:var(--fs-sm);
+  font-weight:600;
+}
+
+/* more nearby */
+.sibling{
+  display:grid; gap:var(--s2);
+  grid-template-columns:1fr;
+  margin:var(--s4) 0 0;
+}
+@media (min-width:600px){ .sibling{ grid-template-columns:1fr 1fr } }
+.sib-card{
+  width:100%;
+  padding:var(--s4) var(--s5);
+  border-radius:var(--r-md);
+  background:var(--surface-2);
+  transition:transform .16s ease;
+}
+@media (prefers-reduced-motion: no-preference){
+  .sib-card:hover{ transform:translateY(-2px) }
+}
+.sib-card .n{ font-size:16px; font-weight:800; letter-spacing:-.024em }
+.sib-card .ko-name{ color:var(--fg-mute); font-size:13px; font-weight:700 }
+.sib-card .c{
+  display:block;
+  margin-top:3px;
+  color:var(--fg-sub);
+  font-size:13px; font-weight:600;
+}
+
+
+/* ==========================================================================
+   18. COMPANIONS (new)
+   ========================================================================== */
+
+/* lime colour field — the third field colour, owns this feature */
+.comp-hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:var(--pop);
+  color:var(--pop-fg);
+  min-height:min(58vh,520px);
+  padding:var(--s7) 0 var(--s7);
+  border-end-start-radius:var(--r-2xl);
+  border-end-end-radius:var(--r-2xl);
+}
+@media (min-width:760px){ .comp-hero{ padding:var(--s8) 0 } }
+.comp-hero::before{
+  content:"";
+  position:absolute; z-index:-1;
+  left:-20%; bottom:-44%;
+  width:min(70vw,480px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(255,90,60,.30), rgba(255,90,60,0) 68%);
+  border-radius:54% 46% 48% 52% / 46% 54% 46% 54%;
+  pointer-events:none;
+}
+.comp-hero .kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-pill);
+  padding:8px 16px;
+  background:rgba(23,18,15,.12);
+  color:var(--ink);
+  font-size:var(--fs-kicker); font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.comp-hero h1{
+  font-size:clamp(38px,10.5vw,72px);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.035em;
+  max-width:15ch;
+  color:var(--ink);
+}
+.comp-hero .sub{
+  margin-top:var(--s4);
+  max-width:40ch;
+  color:rgba(23,18,15,.74);
+  font-size:var(--fs-lead);
+  font-weight:600;
+  line-height:1.45;
+}
+.comp-hero .hero-cta{ margin-top:var(--s5) }
+
+.comp-filters{
+  display:flex; flex-wrap:wrap; gap:var(--s2);
+  margin:var(--s5) 0;
+}
+.comp-filters button{
+  display:inline-flex; align-items:center;
+  min-height:46px;
+  padding:0 20px;
+  border-radius:var(--r-pill);
+  background:var(--surface);
+  box-shadow:inset 0 0 0 2px var(--line-strong);
+  color:var(--fg-sub);
+  font-size:var(--fs-sm); font-weight:800;
+  white-space:nowrap;
+}
+.comp-filters button:hover{ color:var(--fg); box-shadow:inset 0 0 0 2px var(--fg) }
+.comp-filters button[aria-pressed="true"]{ background:var(--fg); color:var(--bg); box-shadow:none }
+
+.comp-list{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+}
+@media (min-width:760px){ .comp-list{ grid-template-columns:1fr 1fr; gap:var(--s4) } }
+
+.ccard{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:var(--s3);
+  width:100%;
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+@media (prefers-reduced-motion: no-preference){
+  .ccard:hover{ transform:translateY(-3px); box-shadow:var(--sh-2) }
+}
+.ccard .head{
+  display:flex; align-items:center; gap:var(--s3);
+  width:100%;
+}
+/* Avatar / meta / verified are shared by the list card AND the detail head,
+   so their base rules stay unscoped — only sizes are overridden per context. */
+.avatar{
+  flex:none;
+  display:flex; align-items:center; justify-content:center;
+  width:56px; height:56px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#FF7A56,#E23B1C);
+  color:#FFF6F0;
+  font-size:19px; font-weight:900;
+  letter-spacing:-.02em;
+}
+.avatar.forest{ background:linear-gradient(145deg,#2E5B4B,#14332B); color:#F4EDE7 }
+.avatar.lime{ background:linear-gradient(145deg,#D9F24B,#9BA82F); color:var(--ink) }
+.ccard h3{
+  font-size:20px; font-weight:800;
+  letter-spacing:-.028em;
+  line-height:1.15;
+}
+.meta{
+  display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px;
+  margin-top:3px;
+  color:var(--fg-sub);
+  font-size:13px; font-weight:700;
+}
+.verified{
+  display:inline-flex; align-items:center; gap:5px;
+  color:var(--ok);
+  font-size:12.5px; font-weight:900;
+}
+.verified::before{
+  content:"";
+  width:7px; height:7px; flex:none;
+  border-radius:50%;
+  background:var(--ok);
+  box-shadow:0 0 0 3px var(--ok-soft);
+}
+.ccard .when{
+  display:inline-flex; align-items:center; gap:8px;
+  border-radius:var(--r-pill);
+  padding:7px 14px;
+  background:var(--surface-2);
+  color:var(--fg);
+  font-size:13px; font-weight:800;
+}
+.ccard .seats{
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:var(--r-pill);
+  padding:7px 14px;
+  background:var(--lime);
+  color:var(--ink);
+  font-size:13px; font-weight:900;
+}
+.ccard .seats.full{
+  background:transparent;
+  color:var(--fg-mute);
+  box-shadow:inset 0 0 0 2px var(--line-strong);
+}
+.ccard .row{
+  display:flex; flex-wrap:wrap; align-items:center; gap:var(--s2);
+  width:100%;
+}
+.ccard p{
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+}
+.ccard .go{ color:var(--accent-ink); font-size:var(--fs-sm); font-weight:900 }
+
+.cstyle-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:var(--r-pill);
+  padding:6px 13px;
+  background:var(--tint);
+  color:var(--tint-fg);
+  font-size:var(--fs-xs); font-weight:800;
+  white-space:nowrap;
+}
+.comp-hero .cstyle-chip{ background:rgba(255,255,255,.94); color:var(--ink) }
+
+/* --- companion detail --- */
+.c-detail{
+  position:relative;
+  overflow:hidden;
+  padding:var(--s6) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--panel);
+  color:var(--panel-fg);
+}
+@media (min-width:760px){ .c-detail{ padding:var(--s7) var(--s6) } }
+.c-detail::after{
+  content:"";
+  position:absolute; right:-18%; top:-44%;
+  width:min(58vw,400px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(217,242,75,.22), rgba(217,242,75,0) 66%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.c-detail > *{ position:relative }
+.c-detail .head{ display:flex; align-items:center; gap:var(--s4) }
+.c-detail .avatar{ width:72px; height:72px; font-size:24px }
+/* 폰에서는 아바타를 제목 위로 올린다 — 옆에 두면 제목 폭이 230px로 줄어 4줄이 된다 */
+@media (max-width:430px){
+  .c-detail .head{ flex-direction:column; align-items:flex-start; gap:var(--s3) }
+  .c-detail .avatar{ width:60px; height:60px; font-size:21px }
+}
+.c-detail h1{
+  font-size:var(--fs-h1);
+  line-height:.96;
+  color:var(--panel-fg);
+}
+.c-detail .meta{ color:var(--panel-sub) }
+.c-detail .verified{ color:var(--lime) }
+.c-detail .verified::before{ background:var(--lime); box-shadow:0 0 0 3px rgba(217,242,75,.18) }
+.c-detail .statline{ margin-top:var(--s5) }
+.c-detail p{
+  margin-top:var(--s5);
+  max-width:46ch;
+  color:var(--panel-sub);
+  font-size:var(--fs-lead);
+  font-weight:500;
+  line-height:1.5;
+}
+.c-detail .btn{ margin-top:var(--s5) }
+
+.c-plan,
+.c-who{
+  margin-top:var(--s4);
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+}
+.c-plan .k,
+.c-who .k{
+  display:block;
+  margin-bottom:var(--s3);
+  color:var(--accent-ink);
+  font-size:11px; font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.c-plan ol{
+  position:relative;
+  list-style:none;
+}
+.c-plan ol::before{
+  content:"";
+  position:absolute; left:15px; top:10px; bottom:14px;
+  width:2px;
+  background:var(--line);
+}
+.c-plan li{ position:relative; padding:0 0 var(--s4) 48px }
+.c-plan li:last-child{ padding-bottom:0 }
+.c-plan .n{
+  position:absolute; left:0; top:0;
+  display:flex; align-items:center; justify-content:center;
+  width:32px; height:32px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#FFF6F0;
+  font-size:14px; font-weight:900;
+}
+.c-plan .t{ font-size:16px; font-weight:800; letter-spacing:-.022em; padding-top:4px }
+.c-plan .d{ margin-top:3px; color:var(--fg-sub); font-size:var(--fs-sm); line-height:1.5 }
+.c-who p{ color:var(--fg); font-size:15.5px; line-height:1.6; max-width:52ch }
+.c-who .chips{ margin-top:var(--s3) }
+
+/* safety — visible, warm, never alarming */
+/* 참가 CTA — 안전 안내를 읽은 다음에 오도록 상세 하단에 둔다 */
+.c-join{
+  display:flex; align-items:center; gap:var(--s4); flex-wrap:wrap;
+  margin:var(--s5) 0 var(--s7);
+}
+.c-join .btn{ flex:1 1 220px }
+.c-join-note{
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  font-weight:800;
+}
+
+.safety{
+  margin-top:var(--s4);
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface-2);
+  border:2px solid var(--lime-deep);
+}
+.safety .k{
+  display:block;
+  margin-bottom:var(--s3);
+  font-size:16px; font-weight:900;
+  letter-spacing:-.022em;
+  color:var(--fg);
+}
+.safety ul{ list-style:none }
+.safety li{
+  position:relative;
+  padding:0 0 var(--s3) 30px;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  font-weight:600;
+  line-height:1.55;
+}
+.safety li:last-child{ padding-bottom:0 }
+.safety li::before{
+  content:"";
+  position:absolute; left:0; top:6px;
+  width:18px; height:18px;
+  border-radius:50%;
+  background:var(--lime);
+}
+.safety li::after{
+  content:"";
+  position:absolute; left:5.5px; top:11px;
+  width:7px; height:4px;
+  border-left:2.2px solid var(--ink);
+  border-bottom:2.2px solid var(--ink);
+  transform:rotate(-45deg);
+}
+
+
+/* ==========================================================================
+   19. PARTNER (merchant-facing, Korean-first)
+   ========================================================================== */
+
+.p-hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:var(--panel);
+  color:var(--panel-fg);
+  min-height:min(58vh,520px);
+  padding:var(--s7) 0 var(--s8);
+  border-end-start-radius:var(--r-2xl);
+  border-end-end-radius:var(--r-2xl);
+}
+@media (min-width:760px){ .p-hero{ padding:var(--s8) 0 var(--s9) } }
+.p-hero::before{
+  content:"";
+  position:absolute; z-index:-1;
+  right:-20%; top:-34%;
+  width:min(74vw,520px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(255,90,60,.34), rgba(255,90,60,0) 66%);
+  border-radius:50% 50% 46% 54% / 52% 48% 52% 48%;
+  pointer-events:none;
+}
+.p-hero .kicker{
+  display:inline-flex;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-pill);
+  padding:8px 16px;
+  background:var(--lime);
+  color:var(--ink);
+  font-size:var(--fs-kicker); font-weight:900;
+  letter-spacing:.1em;
+}
+.p-hero h1{
+  font-size:clamp(34px,9.5vw,64px);
+  font-weight:900;
+  line-height:1.0;
+  letter-spacing:-.035em;
+  max-width:17ch;
+  color:var(--panel-fg);
+}
+.p-hero .sub{
+  margin-top:var(--s5);
+  max-width:40ch;
+  color:var(--panel-sub);
+  font-size:var(--fs-lead);
+  font-weight:500;
+  line-height:1.55;
+}
+.p-hero .en-sub{
+  margin-top:var(--s3);
+  max-width:48ch;
+  color:var(--panel-sub);
+  font-size:var(--fs-sm);
+  opacity:.82;
+  line-height:1.5;
+}
+.p-hero .hero-cta{ margin-top:var(--s6) }
+
+.p-benefits{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+}
+@media (min-width:600px){ .p-benefits{ grid-template-columns:1fr 1fr } }
+@media (min-width:760px){ .p-benefits{ grid-template-columns:repeat(3,1fr); gap:var(--s4) } }
+
+.p-benefit{
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+}
+.p-benefit .ic{
+  display:flex; align-items:center; justify-content:center;
+  width:52px; height:52px;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-md);
+  background:var(--tint);
+}
+.p-benefit .ic svg{ stroke:var(--tint-fg); fill:none }
+.p-benefit h3{
+  font-size:18px; font-weight:800;
+  letter-spacing:-.026em;
+  line-height:1.2;
+}
+.p-benefit p{
+  margin-top:var(--s2);
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+}
+
+.free-note{
+  margin-top:var(--s4);
+  padding:var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--lime);
+  color:var(--ink);
+  font-size:clamp(17px,4.4vw,22px);
+  font-weight:900;
+  letter-spacing:-.026em;
+  line-height:1.3;
+}
+
+.p-form{
+  margin-top:var(--s6);
+  padding:var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--surface);
+  box-shadow:var(--sh-2);
+}
+@media (min-width:760px){ .p-form{ padding:var(--s7) var(--s6) } }
+.p-form h2{
+  margin-bottom:var(--s5);
+  font-size:clamp(24px,6vw,34px);
+  line-height:1.02;
+}
+.p-form .row{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+  margin-bottom:var(--s3);
+}
+@media (min-width:640px){ .p-form .row.two{ grid-template-columns:1fr 1fr } }
+.p-form label{
+  display:block;
+  margin-bottom:6px;
+  color:var(--fg-sub);
+  font-size:13px; font-weight:800;
+}
+.p-form input,
+.p-form textarea{
+  width:100%;
+  min-height:54px;
+  padding:14px 18px;
+  border:2px solid var(--line-strong);
+  border-radius:var(--r-md);
+  background:var(--bg);
+  font-size:16px;   /* 16px stops iOS zoom-on-focus */
+  font-weight:600;
+}
+.p-form textarea{ min-height:110px; resize:vertical; line-height:1.5 }
+.p-form input::placeholder,
+.p-form textarea::placeholder{ color:var(--fg-mute) }
+/* The coral border is decoration ADDED to the focus ring, never a replacement —
+   removing the outline here would leave the app's only real form unnavigable
+   by keyboard. */
+.p-form input:focus,
+.p-form textarea:focus{
+  border-color:var(--accent);
+  background:var(--surface);
+}
+.p-form .btn{ width:100%; margin-top:var(--s3) }
+.p-form .note{
+  margin-top:var(--s3);
+  color:var(--fg-sub);
+  font-size:var(--fs-xs);
+  line-height:1.5;
+}
+
+.p-by{
+  margin-top:var(--s5);
+  color:var(--fg-sub);
+  font-size:var(--fs-xs);
+  font-weight:600;
+}
+
+
+/* ==========================================================================
+   20. TOAST
+   ========================================================================== */
+
+.toast{
+  position:fixed; left:50%; bottom:28px;
+  transform:translateX(-50%) translateY(8px);
+  z-index:999;
+  padding:14px 24px;
+  border-radius:var(--r-pill);
+  background:var(--ink);
+  color:var(--cream);
+  font-size:var(--fs-sm); font-weight:800;
+  box-shadow:var(--sh-3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+}
+.toast.on{ opacity:1; transform:translateX(-50%) translateY(0) }
+
+
+/* ==========================================================================
+   21. MOTION / PRINT
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto }
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+@media print{
+  .hero::before,.hero::after,.comp-hero::before,.p-hero::before,
+  .d-head::after,.s-hero::after,.c-detail::after,.comp-teaser::after{ display:none }
+  header,.langs,.toast,.filters,.comp-filters{ display:none }
+  body{ background:#fff; color:#000 }
+  .hero,.comp-hero,.p-hero,.d-head,.c-detail,.show-local,footer{
+    background:#fff !important; color:#000 !important;
+  }
+}
+
+
+/* ##########################################################################
+   22. v0.6 ADDITIONS
+   --------------------------------------------------------------------------
+   22.1 COMPANIONS — my plans (cnew-*, .form-errors)   views-companion.js
+   22.2 SAVED — hearts, header link, #/saved           views-saved.js · views-guide.js · app.js
+   22.3 FIXES — .cstyle-chip dark-mode edge · 320px CJK overflow in .merchant
+   22.4 DESKTOP LAYOUT (>=1024px) — .wrap-wide, hero grid, preview
+                                                        views-home.js · views-partner.js
+   22.5 PRINT
+   Everything here uses semantic tokens so dark mode follows automatically.
+   Brand constants (--lime, --ink, rgba of ink/white/coral) appear only inside
+   colour fields that never flip between themes (lime/coral/forest blocks).
+   22.4 must stay LAST before print: it relies on source order to beat
+   .wrap, .cards, .know, .dcard, .comp-list ...
+   ########################################################################## */
+
+
+/* ==========================================================================
+   22.1 COMPANIONS — my plans (cnew)
+   #/companions "Your plans" group + request flag, #/c/{id} timeline + request
+   toggle, #/companions/new form. Ink/white translucent values are used only
+   inside the lime field (.cnew-head), same as .comp-hero.
+   ========================================================================== */
+
+/* --- list: my plans group --- */
+.cnew-mine{ margin-bottom:var(--s7) }
+.cnew-mine .sec-head{ margin-bottom:var(--s3) }
+.cnew-local{
+  display:flex; align-items:flex-start; gap:var(--s2);
+}
+.cnew-local svg{ flex:none; margin-top:1px }
+.cnew-mine .cnew-local{ margin:0 0 var(--s4) }
+
+/* "request saved" flag on a sample card — inverted pill */
+.cnew-flag{
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:var(--r-pill);
+  padding:7px 14px;
+  background:var(--fg);
+  color:var(--bg);
+  font-size:13px; font-weight:900;
+  white-space:nowrap;
+}
+.cnew-flag svg{ flex:none }
+
+/* --- detail: "your plan" kicker inside the forest block --- */
+.c-detail .kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-pill);
+  padding:7px 15px;
+  background:var(--lime);
+  color:var(--ink);
+  font-size:11.5px; font-weight:900;
+  letter-spacing:.11em; text-transform:uppercase;
+}
+.c-detail + .cnew-local{ margin-top:var(--s4) }
+/* Japanese titles have no spaces, so h1-h4 keep-all turns them into one
+   unbreakable run; a flex/grid track with min-width:auto then pushes the
+   field or card past the viewport (390px detail, 375px list). Letting the
+   track shrink makes the existing overflow-wrap:break-word actually work. */
+.c-detail .head > div{ min-width:0; max-width:100% }
+.comp-list > .ccard{ min-width:0 }
+.ccard .head > :last-child{ min-width:0 }          /* the title column (a div since cards became links) */
+
+/* --- detail: plan timeline time (same grammar as .route .time) --- */
+.c-plan .time{
+  display:inline-block;
+  margin-right:8px;
+  color:var(--accent-ink);
+  font-size:13px; font-weight:900;
+  letter-spacing:0;
+}
+.c-plan .d{ max-width:52ch }
+.c-plan ol + .chips,
+.c-plan p + .chips{ margin-top:var(--s4) }
+
+/* --- detail: request toggle / delete --- */
+.c-join .btn svg{ flex:none }
+.c-join .btn-primary[aria-pressed="true"]{
+  background:var(--surface);
+  color:var(--fg);
+  box-shadow:inset 0 0 0 2px var(--fg);
+}
+@media (prefers-reduced-motion: no-preference){
+  .c-join .btn-primary[aria-pressed="true"]:hover{ box-shadow:inset 0 0 0 2px var(--fg), var(--sh-2) }
+}
+.c-join-note{ max-width:44ch; line-height:1.45 }
+
+/* --- new plan: lime field block (after .back, so a card, not full-bleed) --- */
+.cnew-head{
+  position:relative;
+  overflow:hidden;
+  padding:var(--s6) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--pop);
+  color:var(--pop-fg);
+}
+@media (min-width:760px){ .cnew-head{ padding:var(--s7) var(--s6) } }
+.cnew-head::after{
+  content:"";
+  position:absolute; left:-18%; bottom:-52%;
+  width:min(62vw,420px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(255,90,60,.26), rgba(255,90,60,0) 68%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.cnew-head > *{ position:relative }
+.cnew-head :focus-visible{ outline-color:var(--ink) }
+.cnew-head .kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-pill);
+  padding:8px 16px;
+  background:rgba(23,18,15,.12);
+  color:var(--ink);
+  font-size:var(--fs-kicker); font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.cnew-head h1{
+  font-size:var(--fs-h1);
+  font-weight:900;
+  line-height:.96;
+  letter-spacing:-.03em;
+  max-width:14ch;
+  color:var(--pop-fg);
+}
+.cnew-head .sub{
+  margin-top:var(--s4);
+  max-width:40ch;
+  color:rgba(23,18,15,.74);
+  font-size:var(--fs-lead);
+  font-weight:600;
+  line-height:1.45;
+}
+.cnew-device{
+  display:inline-flex; align-items:flex-start; gap:var(--s2);
+  margin-top:var(--s5);
+  padding:12px 18px 12px 14px;
+  border-radius:var(--r-md);
+  background:rgba(255,255,255,.94);
+  color:var(--ink);
+  font-size:var(--fs-sm); font-weight:800;
+  line-height:1.4;
+  box-shadow:var(--sh-1);
+}
+.cnew-device svg{ flex:none; margin-top:1px }
+
+/* --- new plan: error summary (role=alert, focused after a failed save) --- */
+/* Full 2px coral ring — the same grammar as .cnew-nocontact.cnew-invalid and
+   .cnew-agree.cnew-invalid. No left accent bar anywhere in this project. */
+.form-errors{
+  margin-top:var(--s4);
+  padding:var(--s4) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--tint);
+  color:var(--tint-fg);
+  box-shadow:inset 0 0 0 2px var(--accent);
+}
+.form-errors .k{
+  display:block;
+  margin-bottom:var(--s2);
+  color:var(--fg);
+  font-size:16px; font-weight:900;
+  letter-spacing:-.022em;
+}
+.form-errors ul{ padding-left:1.15em }
+.form-errors li{ font-size:var(--fs-sm); font-weight:700; line-height:1.5 }
+.form-errors li + li{ margin-top:4px }
+
+/* --- new plan: form (reuses .p-form inputs, adds what it lacks) --- */
+.cnew-form{ margin-top:var(--s4) }
+.cnew-form fieldset{ min-width:0; margin:0; padding:0; border:0 }
+/* legend flows as a normal block instead of sitting in the fieldset border slot */
+.cnew-form legend{ float:left; width:100% }
+.cnew-form legend + *{ clear:both }
+.cnew-form .cnew-sec + .cnew-sec{
+  margin-top:var(--s5);
+  padding-top:var(--s5);
+  border-top:2px solid var(--line);
+}
+.cnew-form .cnew-k{
+  display:block;
+  padding:0;
+  margin-bottom:var(--s4);
+  color:var(--accent-ink);
+  font-size:12px; font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.cnew-form .row > div{ min-width:0 }
+.cnew-form .cnew-field{ margin-bottom:var(--s5) }
+.cnew-form .cnew-field:last-child{ margin-bottom:0 }
+.cnew-form .cnew-field legend{
+  display:block;
+  padding:0;
+  margin-bottom:8px;
+  color:var(--fg-sub);
+  font-size:13px; font-weight:800;
+}
+.cnew-hint{
+  margin-top:6px;
+  color:var(--fg-sub);
+  font-size:var(--fs-xs); font-weight:600;
+  line-height:1.45;
+}
+
+/* select is not covered by the .p-form input rule — same shape as inputs */
+.cnew-form select{
+  display:block;
+  width:100%;
+  min-height:54px;
+  padding:0 14px;
+  border:2px solid var(--line-strong);
+  border-radius:var(--r-md);
+  background-color:var(--bg);
+  color:var(--fg);
+  font-size:16px;   /* stops iOS zoom-on-focus */
+  font-weight:600;
+}
+.cnew-form select:focus{ border-color:var(--accent); background-color:var(--surface) }
+
+/* iOS Safari: date/time inputs ignore width:100% and overflow */
+.cnew-form input[type="date"],
+.cnew-form input[type="time"]{
+  display:block;
+  min-width:0;
+  max-width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  line-height:1.2;
+}
+.cnew-form input::-webkit-date-and-time-value{ text-align:left }
+
+.cnew-form [aria-invalid="true"]{ border-color:var(--accent) }
+
+/* checkbox / radio: undo .p-form input width:100%, 54px height, padding */
+.cnew-form input[type="checkbox"],
+.cnew-form input[type="radio"]{
+  flex:none;
+  width:20px; height:20px;
+  min-height:0;
+  margin:0; padding:0;
+  border:0;
+  background:none;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+
+/* option chip groups (style / language / budget) */
+.cnew-opts{ display:flex; flex-wrap:wrap; gap:var(--s2) }
+.cnew-form .cnew-opt{
+  display:inline-flex; align-items:center; gap:10px;
+  min-height:48px;
+  margin:0;
+  padding:0 18px 0 14px;
+  border-radius:var(--r-pill);
+  background:var(--surface);
+  box-shadow:inset 0 0 0 2px var(--line-strong);
+  color:var(--fg);
+  font-size:var(--fs-sm); font-weight:800;
+  line-height:1.2;
+  cursor:pointer;
+  transition:background-color .15s ease, color .15s ease, box-shadow .15s ease;
+}
+.cnew-form .cnew-opt:hover{ box-shadow:inset 0 0 0 2px var(--fg) }
+.cnew-form .cnew-opt b{ font-weight:900 }
+.cnew-form .cnew-invalid .cnew-opt{ box-shadow:inset 0 0 0 2px var(--accent) }
+.cnew-form .cnew-invalid legend{ color:var(--tint-fg) }
+
+/* before the safety tips: no-contact warning */
+.cnew-nocontact{
+  display:flex; align-items:flex-start; gap:var(--s3);
+  margin-top:var(--s5);
+  padding:var(--s4) var(--s5) var(--s4) var(--s4);
+  border-radius:var(--r-md);
+  background:var(--tint);
+  color:var(--tint-fg);
+  font-size:var(--fs-sm); font-weight:800;
+  line-height:1.5;
+}
+.cnew-nocontact svg{ flex:none; margin-top:1px }
+.cnew-nocontact.cnew-invalid{ box-shadow:inset 0 0 0 2px var(--accent) }
+.cnew-form .safety{ margin-top:var(--s3) }
+
+/* safety agreement — kept OUTSIDE .safety (its lime focus ring vanishes on a light well) */
+.cnew-form .cnew-agree{
+  display:flex; align-items:flex-start; gap:12px;
+  margin:var(--s4) 0 0;
+  padding:var(--s4);
+  border-radius:var(--r-md);
+  background:var(--surface-2);
+  color:var(--fg);
+  font-size:15px; font-weight:700;
+  line-height:1.45;
+  cursor:pointer;
+}
+.cnew-form .cnew-agree input{ margin-top:1px }
+.cnew-form .cnew-agree.cnew-invalid{ box-shadow:inset 0 0 0 2px var(--accent) }
+
+/* checked + focus state on the whole chip via :has — without it the native mark is enough */
+@supports selector(:has(*)){
+  .cnew-form .cnew-opt:has(input:checked){
+    background:var(--fg);
+    color:var(--bg);
+    box-shadow:none;
+  }
+  .cnew-form .cnew-opt:has(input:focus-visible),
+  .cnew-form .cnew-agree:has(input:focus-visible){
+    outline:3px solid var(--focus);
+    outline-offset:3px;
+  }
+}
+
+
+/* ==========================================================================
+   22.2 SAVED — hearts
+   header link (.nav-saved) · spot card heart (.spot-wrap/.save-toggle)
+   · spot detail save pill (.save-btn) · info-checked line (.s-checked)
+   · #/saved page. Saved = coral circle + ink heart (hero grammar).
+   ========================================================================== */
+
+/* --- header: saved link. Unlike .nav-link it shows at every width --- */
+.nav-saved{
+  position:relative;
+  flex:none;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:44px; height:44px;
+  border-radius:var(--r-pill);
+  color:var(--fg);
+  transition:background-color .15s ease, color .15s ease;
+}
+.nav-saved:hover{ background:var(--surface-2) }
+.nav-saved[aria-current="page"]{ background:var(--fg); color:var(--bg) }
+.nav-count{
+  position:absolute; top:1px; right:-2px;
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:20px; height:20px;
+  padding:0 5px;
+  border-radius:var(--r-pill);
+  background:var(--hero-bg);
+  color:var(--hero-fg);
+  font-size:11px; font-weight:900;
+  line-height:1;
+  letter-spacing:0;
+  box-shadow:0 0 0 2px var(--bg);
+}
+/* phone: brand + heart + language switcher must fit on one row */
+@media (max-width:600px){ .nav-right{ gap:var(--s2) } }
+@media (max-width:359px){
+  .bar{ gap:var(--s2) }
+  .nav-right{ gap:6px }
+  .langs button{ padding:0 8px }
+}
+@supports selector(:has(*)){
+  body:has(.hero) .nav-saved,
+  body:has(.comp-hero) .nav-saved{ color:var(--ink) }
+  body:has(.hero) .nav-saved:hover,
+  body:has(.comp-hero) .nav-saved:hover{ background:rgba(23,18,15,.12) }
+  body:has(.hero) .nav-count{ background:var(--ink); color:var(--cream); box-shadow:0 0 0 2px var(--hero-bg) }
+  body:has(.comp-hero) .nav-count{ box-shadow:0 0 0 2px var(--pop) }
+
+  body:has(.p-hero) .nav-saved{ color:var(--panel-fg) }
+  body:has(.p-hero) .nav-saved:hover{ background:var(--panel-line) }
+  body:has(.p-hero) .nav-count{ box-shadow:0 0 0 2px var(--panel) }
+}
+
+/* --- heart toggle (spot card overlay + saved-list row) --- */
+.save-toggle{
+  flex:none;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:44px; height:44px;
+  border-radius:50%;
+  background:var(--surface-2);
+  color:var(--fg-sub);
+  transition:transform .18s ease, background-color .15s ease, color .15s ease;
+}
+.save-toggle:hover{ color:var(--accent-ink) }
+.save-toggle[aria-pressed="true"]{ background:var(--hero-bg); color:var(--hero-fg) }
+.save-toggle[aria-pressed="true"]:hover{ color:var(--hero-fg) }
+
+/* spot card: card button and heart are SIBLINGS inside .spot-wrap
+   (button inside button is invalid HTML). The heart floats top-right. */
+.spot-wrap{
+  position:relative;
+  display:flex;
+  min-width:0;
+}
+.spot-wrap > .spot{ flex:1 1 auto; min-width:0 }
+.spot-wrap > .spot .top{ padding-right:44px }      /* keep the price clear of the heart */
+.spot-wrap > .save-toggle{
+  position:absolute; top:14px; right:14px;
+  z-index:1;
+}
+@media (prefers-reduced-motion: no-preference){
+  /* lift card + heart together, whichever of the two is hovered */
+  .spot-wrap:hover > .spot{ transform:translateY(-3px); box-shadow:var(--sh-2) }
+  .spot-wrap:hover > .save-toggle{ transform:translateY(-3px) }
+  .save-toggle:active{ transform:scale(.9) }
+  .spot-wrap:hover > .save-toggle:active{ transform:translateY(-3px) scale(.9) }
+}
+
+/* spot detail: save pill in .s-actions. Saved = lime pill on the coral field */
+.btn.save-btn[aria-pressed="true"]{
+  background:var(--lime);
+  color:var(--ink);
+  border-color:transparent;
+}
+
+/* --- when the shop info was last checked --- */
+.s-checked{
+  display:flex; align-items:flex-start; gap:10px;
+  margin-top:var(--s3);
+  padding:var(--s3) var(--s4);
+  border-radius:var(--r-md);
+  background:var(--ok-soft);
+  color:var(--fg);
+  font-size:var(--fs-sm); font-weight:700;
+  line-height:1.5;
+}
+.s-checked svg{ flex:none; margin-top:1px; color:var(--ok) }
+.s-checked time{ font-weight:900; font-variant-numeric:tabular-nums }
+.s-checked.warn{ background:var(--warn-soft) }
+.s-checked.warn svg{ color:var(--warn) }
+
+/* spot detail: "More nearby" heading was touching the show-local card above */
+.s-body + .sec-head{ margin-top:var(--s7) }
+
+/* --- #/saved head: coral block (same grammar as .s-hero, sits after .back) --- */
+.saved-head{
+  position:relative;
+  overflow:hidden;
+  padding:var(--s6) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--hero-bg);
+  color:var(--hero-fg);
+}
+@media (min-width:760px){ .saved-head{ padding:var(--s7) var(--s6) } }
+.saved-head::after{
+  content:"";
+  position:absolute; right:-16%; bottom:-46%;
+  width:min(56vw,380px); aspect-ratio:1;
+  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.38), rgba(255,255,255,0) 68%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.saved-head > *{ position:relative }
+.saved-head :focus-visible{ outline-color:var(--ink) }
+.saved-head .kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-bottom:var(--s4);
+  border-radius:var(--r-pill);
+  padding:8px 16px;
+  background:rgba(23,18,15,.10);
+  color:var(--ink);
+  font-size:var(--fs-kicker); font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.saved-head h1{
+  font-size:var(--fs-h1);
+  line-height:.96;
+  max-width:14ch;
+  color:var(--hero-fg);
+}
+.saved-head .saved-count{
+  margin-top:var(--s4);
+  font-size:var(--fs-lead); font-weight:900;
+  letter-spacing:-.02em;
+  color:var(--hero-fg);
+}
+/* Honesty line ("saved on this device only") — must clear AA at 15px/600,
+   so it takes the full --hero-fg (6.00:1 on coral), not --hero-sub (4.12:1).
+   Hierarchy below .saved-count comes from size and weight, not from fade. */
+.saved-head .sub{
+  margin-top:var(--s3);
+  max-width:44ch;
+  color:var(--hero-fg);
+  font-size:15px; font-weight:600;
+  line-height:1.5;
+}
+
+.saved-sec{ padding-top:var(--s5) }
+
+/* groups by district */
+.saved-groups{
+  display:grid; gap:var(--s3);
+  grid-template-columns:1fr;
+}
+@media (min-width:760px){ .saved-groups{ grid-template-columns:1fr 1fr; gap:var(--s4); align-items:start } }
+.saved-group{
+  min-width:0;
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  box-shadow:var(--sh-1);
+}
+.saved-ghead{
+  display:flex; align-items:center; gap:var(--s3);
+  padding-bottom:var(--s3);
+  border-bottom:2px solid var(--line);
+}
+.saved-ghead .sq{ width:52px; height:52px; font-size:16px }
+.saved-gtitle{ flex:1; min-width:0 }
+.saved-region{
+  display:block;
+  margin-bottom:-8px;
+  color:var(--accent-ink);
+  font-size:11px; font-weight:900;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.saved-gtitle h2{
+  font-size:var(--fs-h3);
+  font-weight:800;
+  letter-spacing:-.028em;
+  line-height:1.1;
+}
+/* block link (not inline-flex): a keep-all CJK name must be able to wrap inside the
+   narrow title column instead of sizing to its min-content and running under the chip */
+.saved-gtitle h2 a{
+  display:block;
+  padding-block:12px;
+}
+.saved-gtitle h2 a svg{
+  display:inline-block; vertical-align:-3px;
+  margin-left:2px;
+  color:var(--fg-mute);
+  transition:transform .18s ease, color .18s ease;
+}
+.saved-gtitle h2 a:hover svg{ color:var(--accent); transform:translateX(3px) }
+.saved-ghead .chip{ flex:none }
+/* phone: don't let the count chip eat the narrow title column — rows show the count anyway */
+@media (max-width:420px){ .saved-ghead .chip{ display:none } }
+
+.saved-list{ list-style:none; margin-top:var(--s2) }
+.saved-row{
+  display:flex; align-items:center; gap:var(--s3);
+  padding:var(--s2) 0;
+  border-bottom:1px solid var(--line);
+}
+.saved-row:last-child{ border-bottom:0; padding-bottom:0 }
+.saved-item{
+  flex:1 1 auto; min-width:0;
+  min-height:56px;
+  padding:6px 0;
+}
+.saved-item .n{
+  display:block;
+  font-size:17px; font-weight:800;
+  letter-spacing:-.024em;
+  line-height:1.25;
+  transition:color .15s ease;
+}
+.saved-item .ko-name{
+  display:inline-block;
+  color:var(--fg-sub);
+  font-size:13px; font-weight:700;
+  letter-spacing:-.01em;
+}
+.saved-item .c{
+  display:block;
+  margin-top:2px;
+  color:var(--fg-sub);
+  font-size:13px; font-weight:600;
+}
+.saved-item:hover .n{ color:var(--accent-ink) }
+
+/* empty state — warm tint band, big line, one clear CTA.
+   Plain block flow on purpose: as a flex item a keep-all CJK heading sizes to its
+   min-content (the whole line) and spills out of the band on a 320px phone. */
+.saved-empty{
+  padding:var(--s6) var(--s5);
+  border-radius:var(--r-xl);
+  background:var(--tint);
+  color:var(--fg);
+}
+@media (min-width:760px){ .saved-empty{ padding:var(--s7) var(--s6) } }
+.saved-empty .ic{
+  display:flex; align-items:center; justify-content:center;
+  width:60px; height:60px;
+  border-radius:var(--r-md);
+  background:var(--surface);
+  color:var(--tint-fg);
+}
+.saved-empty h2{
+  margin-top:var(--s4);
+  font-size:var(--fs-h2);
+  line-height:.98;
+  max-width:16ch;
+}
+.saved-empty p{
+  margin-top:var(--s3);
+  max-width:44ch;
+  color:var(--fg-sub);
+  font-size:var(--fs-body);
+  line-height:1.55;
+}
+.saved-empty .btn{ margin-top:var(--s5) }
+@media (max-width:520px){ .saved-empty .btn{ width:100% } }
+
+
+/* ==========================================================================
+   22.3 FIXES — dark-mode chip edge · narrow-screen CJK overflow
+   --------------------------------------------------------------------------
+   (a) .merchant: at 320px the ja/zh heading ("この街でお店を営んでいますか？")
+       is one keep-all run; as a flex item with min-width:auto its column grew
+       to that run and pushed h2 + p 6px past the viewport. Let it shrink so
+       the base overflow-wrap:break-word can wrap it.
+   ========================================================================== */
+
+.merchant > div{ min-width:0; max-width:100% }
+
+/* (b) .cstyle-chip in dark mode.
+   Measured (WCAG 2.x relative luminance):
+     text  --tint-fg on --tint   light #C3350F/#FFE7DF 4.63:1 · dark #FFA48E/#3B2119 7.73:1
+     pill  --tint vs --surface   dark #3B2119/#16332B 1.09:1  ← the real problem:
+           on a dark card the pill edge disappears and the chip reads as loose
+           salmon text. --tint-line (= --tint-fg at 50%, dark only) draws the
+           edge: ~2.8:1 against the card. Light theme keeps it transparent. */
+
+.cstyle-chip{ box-shadow:inset 0 0 0 1.5px var(--tint-line) }
+.comp-hero .cstyle-chip{ box-shadow:none }
+
+
+/* ==========================================================================
+   22.4 DESKTOP LAYOUT (>=1024px) — .wrap-wide · hero grid · hero preview
+   --------------------------------------------------------------------------
+   Mobile-first guarantee: outside the min-width:1024px block there are only
+   two rules — one HIDES the decorative preview, one adds scroll-margin to
+   the partner form wrapper. Neither changes layout below 1024px, so the
+   390px first screen (first district card peeking) is untouched.
+   ========================================================================== */
+
+/* decorative desktop-only cluster: not part of the layout on phones/tablets */
+.hero-preview{ display:none }
+
+/* partner hero CTA (data-scroll="apply") lands here — leave air above the form */
+.p-apply{ scroll-margin-top:var(--s5) }
+
+@media (min-width:1024px){
+
+  /* ---- shared wide container: home lists, companion list, saved list ----
+     Reading columns (story, spot detail body, forms) keep .wrap = 760px. */
+  .wrap-wide{ max-width:1120px }
+
+  /* ---- chrome width is route-independent ----
+     The header and footer rows sit at the wide column on EVERY route. When
+     this was conditional on the page having a .wrap-wide, the logo and nav
+     jumped ~187px sideways each time you opened a card from a list
+     (#/companions -> #/c, #/saved -> #/s). Reading columns stay .wrap = 760px. */
+  header > .wrap,
+  footer > .wrap{ max-width:1120px }
+
+  @supports selector(:has(*)){
+    /* #/companions: the lime hero copy shares that left edge too (list below is wide) */
+    body:has(.wrap-wide) .comp-hero > .wrap{ max-width:1120px }
+
+    /* .sec-head .note is capped at 46ch, so on a 1080px row it stops wrapping
+       and drifts to the far right. Keep it under the h2, as designed. */
+    .wrap-wide .sec-head:has(> .note){ flex-direction:column; align-items:flex-start }
+  }
+
+  /* ---- home hero: copy left, floating UI fragments right ---- */
+  .hero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) clamp(320px,31vw,400px);
+    align-items:center;
+    column-gap:var(--s7);
+  }
+  .hero-grid > .hero-main{ min-width:0 }
+
+  .hero-preview{
+    display:block;
+    position:relative;
+    height:470px;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  .pv-card{
+    position:absolute;
+    width:min(100%,318px);
+    padding:var(--s5);
+    border-radius:var(--r-lg);
+    background:var(--surface);
+    color:var(--fg);
+    box-shadow:var(--sh-3);
+  }
+  /* (a) first spot of the first full-guide district */
+  .pv-spot{ top:0; left:0; z-index:1; rotate:-4deg }
+  /* (b) first companion — overlaps (a)'s lower-right corner */
+  .pv-comp{ top:168px; right:0; z-index:3; rotate:3deg }
+  /* (c) "show this to a local" — mirrors the real .show-local dark card */
+  .pv-local{
+    bottom:0; left:5%; z-index:2; rotate:-2deg;
+    width:min(92%,296px);
+    background:var(--panel);
+    color:var(--panel-fg);
+  }
+
+  .pv-row{ display:flex; align-items:center; gap:var(--s3) }
+  .pv-id{ flex:1; min-width:0 }
+  .pv-card .sq{ width:52px; height:52px; border-radius:var(--r-sm); font-size:16px }
+  .pv-card .avatar{ width:48px; height:48px; font-size:17px }
+
+  .pv-name{
+    font-size:20px; font-weight:800;
+    letter-spacing:-.028em;
+    line-height:1.15;
+  }
+  .pv-ko{
+    margin-top:2px;
+    color:var(--fg-mute);
+    font-size:13px; font-weight:700;
+  }
+  .pv-cat{
+    margin-top:var(--s3);
+    color:var(--fg-sub);
+    font-size:12px; font-weight:800;
+    letter-spacing:.04em; text-transform:uppercase;
+  }
+  .pv-cat .num{ color:var(--accent-ink) }
+  .pv-card .badges{ margin-top:var(--s3) }
+
+  .pv-title{
+    font-size:17px; font-weight:800;
+    letter-spacing:-.024em;
+    line-height:1.2;
+  }
+  .pv-when{
+    margin-top:3px;
+    color:var(--fg-sub);
+    font-size:13px; font-weight:700;
+  }
+  .pv-seats{
+    display:inline-flex; align-items:center;
+    margin-top:var(--s3);
+    border-radius:var(--r-pill);
+    padding:6px 13px;
+    background:var(--lime);
+    color:var(--ink);
+    font-size:12.5px; font-weight:900;
+  }
+  .pv-seats.full{
+    background:transparent;
+    color:var(--fg-mute);
+    box-shadow:inset 0 0 0 2px var(--line-strong);
+  }
+
+  .pv-lbl{
+    color:var(--panel-pop);
+    font-size:10.5px; font-weight:900;
+    letter-spacing:.11em; text-transform:uppercase;
+  }
+  .pv-big{
+    margin-top:var(--s2);
+    font-size:44px; font-weight:900;
+    letter-spacing:-.03em;
+    line-height:1.06;
+    word-break:keep-all;
+    color:var(--panel-fg);
+  }
+  .pv-area{
+    margin-top:var(--s2);
+    color:var(--panel-sub);
+    font-size:var(--fs-sm); font-weight:600;
+  }
+
+  /* ---- district cards: 3 columns, tile stacked above the text ----
+     Side-by-side at 1/3 width would leave the tagline ~200px and clip it;
+     stacking gives it the whole card width. */
+  .wrap-wide .cards{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s4) }
+  .wrap-wide .dcard{
+    position:relative;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:var(--s4);
+    padding:var(--s5);
+  }
+  .wrap-wide .dcard .body{ flex:none; width:100% }
+  .wrap-wide .dcard .d{
+    -webkit-line-clamp:3;
+    min-height:calc(2em * 1.45);      /* chips line up across a row */
+  }
+  .wrap-wide .dcard .chev{
+    position:absolute;
+    top:calc(var(--s5) + 20px);        /* centred on the 60px tile */
+    right:var(--s5);
+    margin:0;
+  }
+
+  /* ---- companion cards (list + my plans): 3 columns ---- */
+  .wrap-wide .comp-list{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s4) }
+
+  /* ---- seasonal strip: cards share the width until they overflow ---- */
+  .wrap-wide .now-card{ flex-grow:1 }
+
+  /* ---- good to know: 3 columns ---- */
+  .wrap-wide .know{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s4) }
+
+  /* ---- companion teaser: copy left, CTA pinned bottom-right ---- */
+  .wrap-wide .comp-teaser{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:end;
+    column-gap:var(--s7);
+  }
+  .wrap-wide .comp-teaser > *{ grid-column:1; justify-self:start }
+  .wrap-wide .comp-teaser .btn{
+    grid-column:2;
+    grid-row:1 / span 3;
+    align-self:end;
+    margin-top:0;
+  }
+}
+
+/* one quiet motion only: the companion card drifts. Never under reduced motion. */
+@media (min-width:1024px) and (prefers-reduced-motion: no-preference){
+  .pv-comp{ animation:golmok-float 7s ease-in-out infinite }
+  @keyframes golmok-float{ 50%{ translate:0 -10px } }
+}
+
+
+/* ==========================================================================
+   22.5 PRINT (v0.6 blocks)
+   ========================================================================== */
+
+@media print{
+  .cnew-head::after,.saved-head::after,.hero-preview{ display:none }
+  .cnew-head,.saved-head{ background:#fff !important; color:#000 !important }
+  .save-toggle,.save-btn,.nav-saved{ display:none }
+}
+
+
+/* ##########################################################################
+   23. v0.7 WEB LAUNCH
+   --------------------------------------------------------------------------
+   23.1 INSTALL HINT — js/install.js · installHintHTML()   views-home.js
+   Sits after 22.5 on purpose: nothing here is overridden by 22.4 (no
+   .wrap-wide descendant rules), so it does not disturb the "22.4 last
+   before print" ordering. Semantic tokens only — dark mode follows.
+   ########################################################################## */
+
+
+/* ==========================================================================
+   23.1 INSTALL HINT
+   --------------------------------------------------------------------------
+   Home, between "good to know" and the merchant band. A raised card in the
+   .dcard / .spot grammar: the real app-icon tile + a title + one honest
+   line ("not an app-store app"), then ONE of
+     .inst-steps   iOS Safari: Share -> Add to Home Screen (two wells)
+     .inst-note    other iOS browsers / in-app browsers: open in Safari
+     .btn-primary  Chromium: [data-install] calls the saved prompt()
+   and always a ghost [data-install-dismiss].
+   The icon tile keeps its brand colours (they live inside the inline SVG,
+   identical to icon.svg) — it previews the real home-screen icon.
+   ========================================================================== */
+
+/* The card is its own <section> (landmark, labelled by its h2). Without this
+   it would add a second 48/64px section gap above AND below; with it, the
+   card sits exactly one gap under #know and one gap over .merchant. */
+.inst-sec{ padding:0 }
+
+.inst{
+  padding:var(--s5);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  color:var(--fg);
+  box-shadow:var(--sh-1);
+}
+@media (min-width:760px){ .inst{ padding:var(--s6) } }
+
+.inst-head{ display:flex; align-items:flex-start; gap:var(--s4) }
+/* narrow phones: tile above the copy, so a Japanese title (no spaces,
+   keep-all) gets the whole card width instead of ~160px */
+@media (max-width:400px){ .inst-head{ flex-direction:column; gap:var(--s3) } }
+
+.inst-app{
+  flex:none;
+  width:56px;
+  height:56px;
+  border-radius:22%;           /* = icon.svg rx 112/512, so the shadow hugs the tile */
+  box-shadow:var(--sh-2);
+}
+.inst-copy{ min-width:0; max-width:100% }
+.inst-t{
+  font-size:clamp(22px,5.4vw,28px);
+  font-weight:900;
+  letter-spacing:-.03em;
+  line-height:1.04;
+  max-width:20ch;
+}
+.inst-p{
+  margin-top:var(--s2);
+  max-width:56ch;
+  color:var(--fg-sub);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+}
+
+/* iOS Safari: two steps, each a recessed well with the iOS glyph in a round pad */
+.inst-steps{
+  list-style:none;
+  display:grid;
+  gap:var(--s2);
+  margin-top:var(--s5);
+}
+@media (min-width:760px){ .inst-steps{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+.inst-steps li{
+  display:flex; align-items:center; gap:var(--s3);
+  min-width:0;
+  padding:var(--s3) var(--s4);
+  border-radius:var(--r-md);
+  background:var(--surface-2);
+  color:var(--fg);
+  font-size:var(--fs-sm);
+  font-weight:700;
+  line-height:1.45;
+}
+.inst-ic{
+  flex:none;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px;
+  border-radius:50%;
+  background:var(--surface);
+  color:var(--accent-ink);
+}
+
+/* other iOS browsers / in-app browsers: "open this page in Safari" */
+.inst-note{
+  margin-top:var(--s4);
+  padding:var(--s4) var(--s5);
+  border-radius:var(--r-md);
+  background:var(--tint);
+  color:var(--tint-fg);
+  font-size:var(--fs-sm);
+  font-weight:700;
+  line-height:1.5;
+}
+
+.inst-actions{
+  display:flex; flex-wrap:wrap; gap:var(--s3);
+  margin-top:var(--s5);
+}
+@media (max-width:520px){ .inst-actions .btn{ flex:1 1 100% } }
+
+@media print{ .inst-sec{ display:none } }
+
+/* ==========================================================================
+   24. v0.7.1 — 언어별 글꼴 순서 · 일본어/중국어 줄바꿈 · 고대비 모드
+   ========================================================================== */
+
+/* 한자는 언어마다 글자 모양이 다르다. 기본 순서는 한국어 글꼴(Malgun Gothic 등)이 앞이라
+   ja/zh 화면의 한자가 한국식 모양으로 그려졌다 → 그 언어 글꼴을 한국어 글꼴보다 앞에 둔다.
+   한글 보조 표기(lang="ko")는 Gothic A1(웹 글꼴) → 한국어 시스템 글꼴로 그대로 그려진다. */
+html[lang="ja"]{
+  --font-ui: 'Figtree','Gothic A1',-apple-system,BlinkMacSystemFont,'Segoe UI',
+             'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic UI','Yu Gothic','Meiryo',
+             'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+html[lang="zh"]{
+  --font-ui: 'Figtree','Gothic A1',-apple-system,BlinkMacSystemFont,'Segoe UI',
+             'PingFang SC','Microsoft YaHei','Noto Sans SC',
+             'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+
+/* keep-all 은 띄어쓰기로 끊는 한국어 규칙이다. 띄어쓰기가 없는 일본어·중국어 제목에 걸면
+   한 줄로 붙어 좁은 화면(320px)에서 넘쳤다(ja 을지로 상권 헤더) → 그 언어에서는 보통 규칙으로. */
+:lang(ja) :is(h1,h2,h3,h4),
+:lang(zh) :is(h1,h2,h3,h4){ word-break:normal; line-break:strict }
+.d-head .top > div{ min-width:0 }
+
+/* 윈도우 고대비(강제 색상) 모드에서는 배경·그림자가 지워져 카드끼리 경계가 사라진다 → 테두리로 구분 */
+@media (forced-colors: active){
+  .dcard, .spot, .sib-card, .ccard, .saved-item{ border:1px solid CanvasText }
+}

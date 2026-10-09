@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Golmok — Go where Seoul actually goes",
+  "short_name": "Golmok",
+  "description": "Neighborhood guides to Seoul, Gangneung and Gongju in 4 languages, with a preview of travel-companion plans.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFF6F0",
+  "theme_color": "#FF5A3C",
+  "categories": ["travel", "lifestyle"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
