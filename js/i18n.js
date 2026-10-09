@@ -65,10 +65,10 @@ const UI = {
   districts_title:{
     en:'Pick a district', ja:'エリアを選ぶ', zh:'选一个街区', ko:'상권 고르기'},
   districts_note:{
-    en:'Each one curated on foot, shop by shop',
-    ja:'一軒ずつ歩いて選んだ店だけ',
-    zh:'每家店都实地走访精选',
-    ko:'한 곳씩 걸어 다니며 고른 가게들'},
+    en:'Researched shop by shop',
+    ja:'一軒ずつ調べて選んだ店',
+    zh:'每家店都逐一查证挑选',
+    ko:'한 곳씩 자료를 확인해 고른 가게들'},
   chip_full:{
     en:'FULL GUIDE', ja:'完全ガイド', zh:'完整指南', ko:'풀 가이드'},
   chip_prev:{

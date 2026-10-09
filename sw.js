@@ -47,7 +47,7 @@
    - CORE 항목이 하나라도 404 면 addAll 이 실패해 서비스워커 설치가 통째로 무산된다.
      빌드는 site/ 에 CORE 가 전부 있는지, 스모크는 프로젝트 루트에 전부 있는지 확인한다.
    - og-image.png · og/card.html 은 넣지 않는다(스크래퍼는 SW 를 거치지 않고, card.html 은 렌더 원본). */
-const CACHE = 'golmok-v10-7b824a2bbd';
+const CACHE = 'golmok-v10-ca15208ac3';
 const PREFIX = 'golmok-';
 const FONTS = 'golmok-fonts';   /* 배포본과 상관없는 글꼴 캐시 — 버전 없이 유지, activate 정리에서 뺀다 */
 const SHELL = 'shell.html';
